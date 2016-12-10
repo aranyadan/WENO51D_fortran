@@ -3,10 +3,10 @@ program main
   use WENO
   use plotter
   implicit none
-  integer,parameter :: n_x = 300
+  integer,parameter :: n_x = 300, SAVE=1,PLOT=1,PLOTVAL=4,VIDEO=1
   real, parameter :: startx = 0, endx = 1,gamma = 1.4
   real :: delx,dt,cfl,tend,lambda_0,lambda,t,dt_0
-  integer :: I,id=0
+  integer :: I,id=0,check
   real,dimension(n_x) :: x,a_0,l_0,p,rho,vel,E,a                             ! Stores x coordinate of the points, primitive values
   real, dimension(n_x,3) :: u,u_0,q_0,q,qo,dF                        ! Stores primitive values and flux values
 
@@ -28,6 +28,14 @@ program main
   t=0
   dt = dt_0
   lambda = lambda_0
+  if(PLOT==1) then
+    check=plot_data(q,x,n_x,t,id,PLOTVAL)
+    id=id+1
+  else if(SAVE==1)then
+    check=save_data(q,x,n_x,t,id)
+    id=id+1
+  end if
+
 
   do while (t < tend)
 
@@ -68,14 +76,17 @@ program main
       dt = tend-t
     end if
 
+    if(PLOT==1) then
+      check=plot_data(q,x,n_x,t,id,PLOTVAL)
+      id=id+1
+    else if(SAVE==1)then
+      check=save_data(q,x,n_x,t,id)
+      id=id+1
+    end if
+
     t=t+dt
   end do
-
-  open(unit=48,file='data')
-  do i=1,n_x
-    write(48,*)x(i),q(i,1)
-  end do
-  close(48)
-  call system('gnuplot -p plotter.plt')
-
+if(VIDEO==1) then
+  check=get_video(PLOTVAL)
+end if
 end program main

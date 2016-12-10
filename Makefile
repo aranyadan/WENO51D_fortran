@@ -1,8 +1,9 @@
 ### create directories
-DIRECTORY = 	obj plots
+DIRECTORY = 	obj plots data mod
 MKDIRP = mkdir -p
 SRCDIR = ./src/
 OBJDIR = ./obj/
+MODDIR = ./mod/
 
 ### suffix rule
 .SUFFIXES:
@@ -25,7 +26,7 @@ $(DIRECTORY):
 	$(MKDIRP) $@
 ### Creating the obj files
 $(addprefix ./obj/, %.o): $(addprefix ./src/, %.f90)
-	$(F90) $(COMPFLAGS) $< -o $@
+	$(F90) $(COMPFLAGS) $< -o $@ -J$(MODDIR)
 # $< refers to file calling the statement, $@ refers to the file being created
 ### Linking and creating executable file
 output:  $(OBJS)
@@ -34,4 +35,15 @@ output:  $(OBJS)
 clean:
 	rm -f *.o
 	rm -f output
-	rm -r obj
+	rm -rf obj mod
+	rm -rf *.mod
+cleanall:
+	rm -rf data
+	rm -rf plots
+	rm -f *.o
+	rm -f output
+	rm -rf obj mod
+	rm -rf *.mod
+cleandat:
+	rm -rf data/*
+	rm -rf plots/*
