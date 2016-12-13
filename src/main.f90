@@ -3,7 +3,7 @@ program main
   use WENO
   use plotter
   implicit none
-  integer,parameter :: n_x = 300, SAVE=1,PLOT=1,PLOTVAL=4,VIDEO=1
+  integer,parameter :: n_x = 300, SAVE=1,PLOT=1,PLOTVAL=3,VIDEO=1
   real, parameter :: startx = 0, endx = 1,gamma = 1.4
   real :: delx,dt,cfl,tend,lambda_0,lambda,t,dt_0
   integer :: I,id=0,check
