@@ -1,0 +1,12 @@
+In LINUX environment
+run- 'make'
+data, plots and obj directories will be created.
+Run the executable with ./output
+
+In main.f90,
+set SAVE=1 to save data, elso 0
+set PLOT=1 to save plot, else 0 (Must have gnuplot installed)
+set PLOTVAL as instructed in the main file to plot values
+set VIDEO=1 to save video (Must have avconv installed)
+
+For implementation of WENO5, refer to provided paper.
