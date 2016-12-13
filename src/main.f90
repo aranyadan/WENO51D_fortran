@@ -1,9 +1,20 @@
 ! Main file
+! Solving dq/dt + dFdx=0
 program main
   use WENO
   use plotter
   implicit none
-  integer,parameter :: n_x = 300, SAVE=1,PLOT=1,PLOTVAL=4,VIDEO=1
+
+  ! If you want to save data in the data folder, turn SAVE=1, else 0
+  ! If you want to plot the data in the plots folder, turn turn PLOT=1 (MUST HAVE GNUPLOT INSTALLED IN LINUX) else keep as 0
+  ! For plotting, set PLOTVAL as follows
+  !   PLOTVAL=1 for velocity profile
+  !   PLOTVAL=2 for pressure profile
+  !   PLOTVAL=3 for density profile
+  !   PLOTVAL=4 for Mach number profile
+  ! To save a video in the plots folder, turn VIDEO=1 (MUST HAVE  avconv INSTALLED IN LINUX) ELSE KEEP IT AS 0
+
+  integer,parameter :: n_x = 300, SAVE=1,PLOT=1,PLOTVAL=2,VIDEO=0
   real, parameter :: startx = 0, endx = 1,gamma = 1.4
   real :: delx,dt,cfl,tend,lambda_0,lambda,t,dt_0
   integer :: I,id=0,check
@@ -15,11 +26,12 @@ program main
   cfl = 0.55
   tend = 0.1
 
+  ! setting x-coordinate
   x = (/ (startx + I*delx,I = 1,n_x) /)
   call IC1DStep(u_0,q_0,n_x,x)
   q = q_0
   a_0 = SQRT(gamma*u_0(:,2)/u_0(:,3))
-  lambda_0 = MAXVAL( ABS( u_0(:,1) )+a_0 )
+  lambda_0 = MAXVAL( ABS( u_0(:,1) )+a_0 )  ! Largest eigenvalue
   dt_0 = cfl * delx/lambda_0
 
   ! ! Solver Loop
@@ -28,6 +40,7 @@ program main
   t=0
   dt = dt_0
   lambda = lambda_0
+
   if(PLOT==1) then
     check=plot_data(q,x,n_x,t,id,PLOTVAL)
     id=id+1

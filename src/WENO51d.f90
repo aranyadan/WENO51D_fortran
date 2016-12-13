@@ -1,6 +1,7 @@
 module WENO
 contains
-  
+
+  ! Shifts entire array to the left or right by 'times' places
   function turn(F,n_x,times)
     integer :: n_x,times
     real,dimension(n_x,3) :: F,F_new,turn
@@ -24,6 +25,7 @@ contains
     return
   end function turn
 
+  ! builds flux F from vector q
   function build_flux(q,n_x)
     integer :: n_x
     real :: gamma=1.4
@@ -43,6 +45,7 @@ contains
     return
   end function build_flux
 
+  ! WENO5 implementation
   function WENO51d(lambda,q,dx,n_x)
     integer :: n_x
     real,dimension(n_x,3) :: q,F,WENO51d
@@ -57,12 +60,15 @@ contains
 
     ! Lax Friedrich's Flux splitting
     v = 0.5*(F + lambda*q)
+
     temp = 0.5 *(F - lambda*q)
+
+    ! Shift stencil 1 unit right
     u = turn(temp,n_x,-1)
 
 
     ! Right flux
-    ! compute u_{i+1/2}^{-}
+    ! compute u_{i+1/2}^{+}
     vmm = turn(v,n_x,2)
     vm = turn(v,n_x,1)
     vp = turn(v,n_x,-1)
@@ -95,12 +101,12 @@ contains
     w1n = alpha1n/alphasumn
     w2n = alpha2n/alphasumn
 
-    ! Flux at the boundary u_{i+1/2}^{-}
+    ! Flux at the boundary u_{i+1/2}^{+}
     hn = w0n*p0n + w1n*p1n + w2n*p2n
 
 
     ! Left Flux
-    ! compute u_{i-1/2}^{+}
+    ! compute u_{i+1/2}^{-}
     umm = turn(u,n_x,2)
     um = turn(u,n_x,1)
     up = turn(u,n_x,-1)
@@ -132,7 +138,7 @@ contains
     w1p = alpha1p/alphasump
     w2p = alpha2p/alphasump
 
-    ! Numerical Flux at boundary u_{i-1/2}^{+}
+    ! Numerical Flux at boundary u_{i+1/2}^{-}
     hp = w0p*p0p + w1p*p1p + w2p*p2p
 
     res = ((hp - turn(hp,n_x,1)) + (hn - turn(hn,n_x,1)))/dx

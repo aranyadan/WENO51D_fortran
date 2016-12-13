@@ -1,3 +1,5 @@
+! Sets initial condition to step 
+
 subroutine IC1DStep(u,q,n_x,x)
   implicit none
   integer :: n_x,mid_x,i
@@ -30,12 +32,5 @@ subroutine IC1DStep(u,q,n_x,x)
     E(i) = u(i,2) / ( (gamma-1)*u(i,3) ) + 0.5 * u(i,1)**2
     q(i,3) = E(i) * u(i,3);
   end do
-  ! Check IC setup
-  ! open(unit=48,file='data')
-  ! do i=1,n_x
-  !   write(48,*)x(i),F(i,3)
-  ! end do
-  ! close(48)
-  ! call system('gnuplot -p plotter.plt')
   return
 end subroutine IC1DStep
