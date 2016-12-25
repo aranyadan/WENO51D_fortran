@@ -3,9 +3,6 @@ contains
   function turn(F,n_x,times)
     integer :: n_x,times
     real,dimension(n_x,3) :: F,F_new,turn
-
-    ! print*,'in!',n_x
-    ! turn=F
     if(times == 0) then
       turn = F
     else
@@ -27,12 +24,9 @@ contains
     integer :: n_x
     real :: gamma=1.4
     real, dimension(n_x,3) :: q,F,build_flux
-    real, dimension(n_x) :: u,p,rho,E
+    real, dimension(n_x) :: u,p,rho,E,a
 
-    rho = q(:,1)
-    u = q(:,2)/rho
-    E = q(:,3)/rho
-    p = (E - 0.5*u**2)*(gamma-1)*rho
+    call primitives(q,n_x,rho,u,E,p,a)
 
     F(:,1) = rho*u
     F(:,2) = rho*u*u + p

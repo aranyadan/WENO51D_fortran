@@ -11,10 +11,6 @@ subroutine WENO51d(lambda,q,dx,n_x,hp,hn)
   ! Build the flux
   F = build_flux(q,n_x)
 
-  ! Lax Friedrich's Flux splitting
-  ! v = 0.5*(F + lambda*q)
-  ! temp = 0.5 *(F - lambda*q)
-  ! u = turn(temp,n_x,-1)
   v=q
   u=turn(q,n_x,-1)
 
@@ -27,13 +23,13 @@ subroutine WENO51d(lambda,q,dx,n_x,hp,hn)
 
   ! Polynomials
   p0p = (2.0*vmm - 7.0*vm + 11.0*v)/6
-  p1p = (-vm + 5.0*v + 2.0*vp)/6
-  p2p = (2.0*v + 5.0*vp - vpp)/6
+  p1p = (-vm     + 5.0*v  + 2.0*vp)/6
+  p2p = (2.0*v   + 5.0*vp - vpp   )/6
 
   ! Smoothness indicators
-  B0p = 13/12*(vmm-2*vm+v  )**2 + 1/4*(vmm-4*vm+3*v)**2
-  B1p = 13/12*(vm -2*v +vp )**2 + 1/4*(vm-vp)**2
-  B2p = 13/12*(v  -2*vp+vpp)**2 + 1/4*(3*v-4*vp+vpp)**2
+  B0p = 13/12*(vmm-2 * vm + v  )**2 + 1/4*(vmm - 4*vm + 3*v)**2
+  B1p = 13/12*(vm -2 * v  + vp )**2 + 1/4*(vm  - vp        )**2
+  B2p = 13/12*(v  -2 * vp + vpp)**2 + 1/4*(3*v - 4*vp + vpp)**2
 
   !constants
   d0p = 1.0/10
@@ -69,9 +65,9 @@ subroutine WENO51d(lambda,q,dx,n_x,hp,hn)
   p2n = (11*u  - 7*up + 2*upp)/6
 
   ! Smoothness indicators
-  B0n = 13/12*(umm-2*um+u  )**2 + 1/4*(umm-4*um+3*u)**2
-  B1n = 13/12*(um -2*u +up )**2 + 1/4*(um-up)**2
-  B2n = 13/12*(u  -2*up+upp)**2 + 1/4*(3*u -4*up+upp)**2
+  B0n = 13/12*(umm-2*um+u  )**2 + 1/4*(umm - 4*um + 3*u)**2
+  B1n = 13/12*(um -2*u +up )**2 + 1/4*(um  - up        )**2
+  B2n = 13/12*(u  -2*up+upp)**2 + 1/4*(3*u - 4*up + upp)**2
 
   !constants
   d0n = 3.0/10

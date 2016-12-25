@@ -2,13 +2,14 @@
 program main
   use flux
   use plotter
+  use transform
   implicit none
   integer,parameter :: n_x = 300, SAVE=1,PLOT=1,PLOTVAL=2,VIDEO=1
   real, parameter :: startx = 0, endx = 1,gamma = 1.4
   real :: delx,dt,cfl,tend,lambda_0,lambda,t,dt_0
   integer :: I,id=0,check
   real,dimension(n_x) :: x,a_0,l_0,p,rho,vel,E,a                             ! Stores x coordinate of the points, primitive values
-  real, dimension(n_x,3) :: u,u_0,q_0,q,qo,dF,hp,hn                        ! Stores primitive values and flux values
+  real, dimension(n_x,3) :: u,u_0,q_0,q,qo,dF,hp,hn,v,vp,vn                  ! Stores primitive values and flux values
 
 
   delx = abs(endx-startx)/n_x
@@ -22,7 +23,7 @@ program main
   lambda_0 = MAXVAL( ABS( u_0(:,1) )+a_0 )
   dt_0 = cfl * delx/lambda_0
 
-  ! ! Solver Loop
+  !! Solver Loop
   u = u_0
   q = q_0
   t=0
@@ -43,7 +44,11 @@ program main
     qo = q
 
     ! RK 1st step
-    call WENO51d(lambda,q,delx,n_x,hp,hn)
+    ! v = Rinv_mult(q,n_x)
+    ! call WENO51d(lambda,v,delx,n_x,vp,vn)
+    ! hp = R_mult(q,vp,n_x)
+    ! hn = R_mult(q,vn,n_x)
+     call WENO51d(lambda,q,delx,n_x,hp,hn)
     dF = get_deriv(lambda,hp,hn,q,n_x,delx)
     q = qo - dt*dF
     q(1,:) = qo(1,:)
@@ -51,27 +56,30 @@ program main
 
 
     ! RK 2nd step
-    call WENO51d(lambda,q,delx,n_x,hp,hn)
+    ! v = Rinv_mult(q,n_x)
+    ! call WENO51d(lambda,v,delx,n_x,vp,vn)
+    ! hp = R_mult(q,vp,n_x)
+    ! hn = R_mult(q,vn,n_x)
+     call WENO51d(lambda,q,delx,n_x,hp,hn)
     dF = get_deriv(lambda,hp,hn,q,n_x,delx)
     q = 0.75*qo + 0.25*( q - dt*dF)
     q(1,:) = qo(1,:)
     q(n_x,:) = qo(n_x,:)
 
 
-
     ! RK 3rd step
-    call WENO51d(lambda,q,delx,n_x,hp,hn)
+    ! v = Rinv_mult(q,n_x)
+    ! call WENO51d(lambda,v,delx,n_x,vp,vn)
+    ! hp = R_mult(q,vp,n_x)
+    ! hn = R_mult(q,vn,n_x)
+     call WENO51d(lambda,q,delx,n_x,hp,hn)
     dF = get_deriv(lambda,hp,hn,q,n_x,delx)
     q = (qo + 2*( q - dt*dF))/3
     q(1,:) = qo(1,:)
     q(n_x,:) = qo(n_x,:)
 
     ! Extract primitive values
-    rho = q(:,1)
-    vel = q(:,2)/rho
-    E = q(:,3)/rho
-    p = (gamma-1)*rho*(E-0.5*vel*vel)
-    a = SQRT(gamma*p/rho)
+    call primitives(q,n_x,rho,vel,E,p,a)
 
     lambda = MAXVAL(ABS(vel)+a)
     dt = cfl*delx/lambda
