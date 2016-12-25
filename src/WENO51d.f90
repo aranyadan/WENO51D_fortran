@@ -63,7 +63,7 @@ contains
     u=turn(q,n_x,-1)
 
     ! Right flux
-    ! compute u_{i+1/2}^{-}
+    ! compute u_{i+1/2}^{+}
     vmm = turn(v,n_x,2)
     vm = turn(v,n_x,1)
     vp = turn(v,n_x,-1)
@@ -96,12 +96,12 @@ contains
     w1n = alpha1n/alphasumn
     w2n = alpha2n/alphasumn
 
-    ! Flux at the boundary u_{i+1/2}^{-}
+    ! Flux at the boundary u_{i+1/2}^{+}
     hn = w0n*p0n + w1n*p1n + w2n*p2n
 
 
     ! Left Flux
-    ! compute u_{i-1/2}^{+}
+    ! compute u_{i+1/2}^{-}
     umm = turn(u,n_x,2)
     um = turn(u,n_x,1)
     up = turn(u,n_x,-1)
@@ -133,7 +133,7 @@ contains
     w1p = alpha1p/alphasump
     w2p = alpha2p/alphasump
 
-    ! Numerical Flux at boundary u_{i-1/2}^{+}
+    ! Numerical Flux at boundary u_{i+1/2}^{-}
     hp = w0p*p0p + w1p*p1p + w2p*p2p
 
     ! res = ((hp - turn(hp,n_x,1)) + (hn - turn(hn,n_x,1)))/dx
