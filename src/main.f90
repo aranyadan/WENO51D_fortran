@@ -1,14 +1,14 @@
 ! Main file
 program main
-  use WENO
+  use flux
   use plotter
   implicit none
-  integer,parameter :: n_x = 300, SAVE=1,PLOT=1,PLOTVAL=3,VIDEO=1
+  integer,parameter :: n_x = 300, SAVE=1,PLOT=1,PLOTVAL=2,VIDEO=1
   real, parameter :: startx = 0, endx = 1,gamma = 1.4
   real :: delx,dt,cfl,tend,lambda_0,lambda,t,dt_0
   integer :: I,id=0,check
   real,dimension(n_x) :: x,a_0,l_0,p,rho,vel,E,a                             ! Stores x coordinate of the points, primitive values
-  real, dimension(n_x,3) :: u,u_0,q_0,q,qo,dF                        ! Stores primitive values and flux values
+  real, dimension(n_x,3) :: u,u_0,q_0,q,qo,dF,hp,hn                        ! Stores primitive values and flux values
 
 
   delx = abs(endx-startx)/n_x
@@ -43,14 +43,16 @@ program main
     qo = q
 
     ! RK 1st step
-    dF = WENO51d(lambda,q,delx,n_x)
+    call WENO51d(lambda,q,delx,n_x,hp,hn)
+    dF = get_deriv(lambda,hp,hn,q,n_x,delx)
     q = qo - dt*dF
     q(1,:) = qo(1,:)
     q(n_x,:) = qo(n_x,:)
 
 
     ! RK 2nd step
-    dF = WENO51d(lambda,q,delx,n_x)
+    call WENO51d(lambda,q,delx,n_x,hp,hn)
+    dF = get_deriv(lambda,hp,hn,q,n_x,delx)
     q = 0.75*qo + 0.25*( q - dt*dF)
     q(1,:) = qo(1,:)
     q(n_x,:) = qo(n_x,:)
@@ -58,7 +60,8 @@ program main
 
 
     ! RK 3rd step
-    dF = WENO51d(lambda,q,delx,n_x)
+    call WENO51d(lambda,q,delx,n_x,hp,hn)
+    dF = get_deriv(lambda,hp,hn,q,n_x,delx)
     q = (qo + 2*( q - dt*dF))/3
     q(1,:) = qo(1,:)
     q(n_x,:) = qo(n_x,:)

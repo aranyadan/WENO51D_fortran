@@ -87,7 +87,7 @@ contains
       case default
         property='y'
     end select
-    write(command,'(a,a,a,a,a)') "avconv -i ""./plots/",trim(property),"%04d.png"" -r 30 ./plots/",trim(property),".mkv"
+    write(command,'(a,a,a,a,a)') "avconv -i ""./plots/",trim(property),"%04d.png"" -r 30 ./plots/",trim(property),".mp4"
     call system(command)
   end function get_video
 end module plotter
