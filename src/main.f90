@@ -44,11 +44,11 @@ program main
     qo = q
 
     ! RK 1st step
-    ! v = Rinv_mult(q,n_x)
-    ! call WENO51d(lambda,v,delx,n_x,vp,vn)
-    ! hp = R_mult(q,vp,n_x)
-    ! hn = R_mult(q,vn,n_x)
-     call WENO51d(lambda,q,delx,n_x,hp,hn)
+    v = Rinv_mult(q,n_x)
+    call WENO51d(lambda,v,delx,n_x,vp,vn)
+    hp = R_mult(q,vp,n_x)
+    hn = R_mult(q,vn,n_x)
+    !  call WENO51d(lambda,q,delx,n_x,hp,hn)
     dF = get_deriv(lambda,hp,hn,q,n_x,delx)
     q = qo - dt*dF
     q(1,:) = qo(1,:)
@@ -56,11 +56,11 @@ program main
 
 
     ! RK 2nd step
-    ! v = Rinv_mult(q,n_x)
-    ! call WENO51d(lambda,v,delx,n_x,vp,vn)
-    ! hp = R_mult(q,vp,n_x)
-    ! hn = R_mult(q,vn,n_x)
-     call WENO51d(lambda,q,delx,n_x,hp,hn)
+    v = Rinv_mult(q,n_x)
+    call WENO51d(lambda,v,delx,n_x,vp,vn)
+    hp = R_mult(q,vp,n_x)
+    hn = R_mult(q,vn,n_x)
+    !  call WENO51d(lambda,q,delx,n_x,hp,hn)
     dF = get_deriv(lambda,hp,hn,q,n_x,delx)
     q = 0.75*qo + 0.25*( q - dt*dF)
     q(1,:) = qo(1,:)
@@ -68,11 +68,11 @@ program main
 
 
     ! RK 3rd step
-    ! v = Rinv_mult(q,n_x)
-    ! call WENO51d(lambda,v,delx,n_x,vp,vn)
-    ! hp = R_mult(q,vp,n_x)
-    ! hn = R_mult(q,vn,n_x)
-     call WENO51d(lambda,q,delx,n_x,hp,hn)
+    v = Rinv_mult(q,n_x)
+    call WENO51d(lambda,v,delx,n_x,vp,vn)
+    hp = R_mult(q,vp,n_x)
+    hn = R_mult(q,vn,n_x)
+    !  call WENO51d(lambda,q,delx,n_x,hp,hn)
     dF = get_deriv(lambda,hp,hn,q,n_x,delx)
     q = (qo + 2*( q - dt*dF))/3
     q(1,:) = qo(1,:)
