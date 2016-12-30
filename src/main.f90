@@ -39,7 +39,6 @@ program main
 
 
   do while (t < tend)
-
     ! Starting RK
     qo = q
 
@@ -94,7 +93,6 @@ program main
       check=save_data(q,x,n_x,t,id)
       id=id+1
     end if
-
     t=t+dt
   end do
 if(VIDEO==1) then
