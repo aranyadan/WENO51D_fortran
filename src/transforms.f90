@@ -110,27 +110,27 @@ contains
     real,dimension(3,3) :: Rcalc
     real :: gamma = 1.4
 
-    ! Rcalc(1,1) = 1 !
-    ! Rcalc(2,1) = 0 !
-    ! Rcalc(3,1) = 0 !
-    ! Rcalc(1,2) = 0 !
-    ! Rcalc(2,2) = 1 !
-    ! Rcalc(3,2) = 0 !
-    ! Rcalc(1,3) = 0 !
-    ! Rcalc(2,3) = 0 !
-    ! Rcalc(3,3) = 1 !
+    Rcalc(1,1) = 1 !
+    Rcalc(2,1) = 0 !
+    Rcalc(3,1) = 0 !
+    Rcalc(1,2) = 0 !
+    Rcalc(2,2) = 1 !
+    Rcalc(3,2) = 0 !
+    Rcalc(1,3) = 0 !
+    Rcalc(2,3) = 0 !
+    Rcalc(3,3) = 1 !
 
-    Rcalc(1,1) = 1
-    Rcalc(2,1) = u-a
-    Rcalc(3,1) = a*a/(gamma - 1) + 0.5*u*u - u*a
-
-    Rcalc(1,2) = 1
-    Rcalc(2,2) = u
-    Rcalc(3,2) = 0.5*u*u
-
-    Rcalc(1,3) = 1
-    Rcalc(2,3) = u+a
-    Rcalc(3,3) = a*a/(gamma - 1) + 0.5*u*u + u*a
+    ! Rcalc(1,1) = 1
+    ! Rcalc(2,1) = u-a
+    ! Rcalc(3,1) = a*a/(gamma - 1) + 0.5*u*u - u*a
+    !
+    ! Rcalc(1,2) = 1
+    ! Rcalc(2,2) = u
+    ! Rcalc(3,2) = 0.5*u*u
+    !
+    ! Rcalc(1,3) = 1
+    ! Rcalc(2,3) = u+a
+    ! Rcalc(3,3) = a*a/(gamma - 1) + 0.5*u*u + u*a
   end function Rcalc
 
 

@@ -9,7 +9,7 @@ program main
   real :: delx,dt,cfl,tend,lambda_0,lambda,t,dt_0
   integer :: I,id=0,check
   real,dimension(n_x) :: x,a_0,l_0,p,rho,vel,E,a                             ! Stores x coordinate of the points, primitive values
-  real, dimension(n_x,3) :: u,u_0,q_0,q,qo,dF,hp,hn,v,vp,vn                  ! Stores primitive values and flux values
+  real, dimension(n_x,3) :: u,u_0,q_0,q,qo,dF,hp,hn,v,vp,vn,g,f,gp,gn        ! Stores primitive values and flux values
 
 
   delx = abs(endx-startx)/n_x
@@ -44,36 +44,41 @@ program main
 
     ! RK 1st step
     v = Rinv_mult(q,n_x)
-    call WENO51d(lambda,v,delx,n_x,vp,vn)
-    hp = R_mult(q,vp,n_x)
-    hn = R_mult(q,vn,n_x)
+    f = build_flux(q,n_x)
+    g = Rinv_mult(f,n_x)
+    call WENO51d(lambda,f,q,delx,n_x,gp,gn)
+    hp = R_mult(q,gp,n_x)
+    hn = R_mult(q,gn,n_x)
+    dF = ((hp - turn(hp,n_x,1)) + (hn - turn(hn,n_x,1)))/delx
     !  call WENO51d(lambda,q,delx,n_x,hp,hn)
-    dF = get_deriv(lambda,hp,hn,q,n_x,delx)
     q = qo - dt*dF
     q(1,:) = qo(1,:)
     q(n_x,:) = qo(n_x,:)
 
-
     ! RK 2nd step
     v = Rinv_mult(q,n_x)
-    call WENO51d(lambda,v,delx,n_x,vp,vn)
-    hp = R_mult(q,vp,n_x)
-    hn = R_mult(q,vn,n_x)
+    f = build_flux(q,n_x)
+    g = Rinv_mult(f,n_x)
+    call WENO51d(lambda,f,q,delx,n_x,gp,gn)
+    hp = R_mult(q,gp,n_x)
+    hn = R_mult(q,gn,n_x)
+    dF = ((hp - turn(hp,n_x,1)) + (hn - turn(hn,n_x,1)))/delx
     !  call WENO51d(lambda,q,delx,n_x,hp,hn)
-    dF = get_deriv(lambda,hp,hn,q,n_x,delx)
-    q = 0.75*qo + 0.25*( q - dt*dF)
+    q = qo - dt*dF
     q(1,:) = qo(1,:)
     q(n_x,:) = qo(n_x,:)
 
 
     ! RK 3rd step
     v = Rinv_mult(q,n_x)
-    call WENO51d(lambda,v,delx,n_x,vp,vn)
-    hp = R_mult(q,vp,n_x)
-    hn = R_mult(q,vn,n_x)
+    f = build_flux(q,n_x)
+    g = Rinv_mult(f,n_x)
+    call WENO51d(lambda,f,q,delx,n_x,gp,gn)
+    hp = R_mult(q,gp,n_x)
+    hn = R_mult(q,gn,n_x)
+    dF = ((hp - turn(hp,n_x,1)) + (hn - turn(hn,n_x,1)))/delx
     !  call WENO51d(lambda,q,delx,n_x,hp,hn)
-    dF = get_deriv(lambda,hp,hn,q,n_x,delx)
-    q = (qo + 2*( q - dt*dF))/3
+    q = qo - dt*dF
     q(1,:) = qo(1,:)
     q(n_x,:) = qo(n_x,:)
 

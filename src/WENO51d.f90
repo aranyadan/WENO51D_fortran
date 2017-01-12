@@ -1,18 +1,20 @@
-subroutine WENO51d(lambda,q,dx,n_x,hp,hn)
+subroutine WENO51d(lambda,F,q,dx,n_x,hp,hn)
   use flux
   integer :: n_x
-  real,dimension(n_x,3) :: q,F
+  real,dimension(n_x,3) :: g,F
   real :: lambda
   real,dimension(n_x,3) :: u,v,umm,um,up,upp,vmm,vm,vp,vpp,p0n,p1n,p2n,B0n,B1n
   real,dimension(n_x,3) :: B2n,alpha0n,alpha1n,alpha2n,alphasumn,w0n,w1n,w2n,hn
   real,dimension(n_x,3) :: p0p,p1p,p2p,B0p,B1p,B2p,alpha0p,alpha1p,alpha2p
-  real,dimension(n_x,3) :: alphasump,w0p,w1p,w2p,hp,res,temp,res1,res2
+  real,dimension(n_x,3) :: alphasump,w0p,w1p,w2p,hp,res,temp,res1,res2,q
   real :: d0n,d0p,d1n,d1p,d2n,d2p
   ! Build the flux
-  F = build_flux(q,n_x)
 
-  v=q
-  u=turn(q,n_x,-1)
+  v = 0.5 * (F + lambda*q)
+
+  temp = 0.5 * (F - lambda*q)
+
+  u = turn(temp,n_x,-1)
 
   ! Right flux
   ! compute u_{i+1/2}^{+}
