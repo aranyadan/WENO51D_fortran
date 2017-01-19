@@ -4,7 +4,7 @@ program main
   use plotter
   use transform
   implicit none
-  integer,parameter :: n_x = 300, SAVE=1,PLOT=1,PLOTVAL=2,VIDEO=1
+  integer,parameter :: n_x = 300, SAVE=1,PLOT=1,PLOTVAL=2,VIDEO=0
   real, parameter :: startx = 0, endx = 1,gamma = 1.4
   real :: delx,dt,cfl,tend,lambda_0,lambda,t,dt_0
   integer :: I,id=0,check
@@ -43,42 +43,31 @@ program main
     qo = q
 
     ! RK 1st step
-    v = Rinv_mult(q,n_x)
     f = build_flux(q,n_x)
-    g = Rinv_mult(f,n_x)
-    call WENO51d(lambda,f,q,delx,n_x,gp,gn)
-    hp = R_mult(q,gp,n_x)
-    hn = R_mult(q,gn,n_x)
+    call WENO51d(lambda,f,q,delx,n_x,hp,hn)
     dF = ((hp - turn(hp,n_x,1)) + (hn - turn(hn,n_x,1)))/delx
-    !  call WENO51d(lambda,q,delx,n_x,hp,hn)
+
     q = qo - dt*dF
     q(1,:) = qo(1,:)
     q(n_x,:) = qo(n_x,:)
 
+
     ! RK 2nd step
-    v = Rinv_mult(q,n_x)
     f = build_flux(q,n_x)
-    g = Rinv_mult(f,n_x)
-    call WENO51d(lambda,f,q,delx,n_x,gp,gn)
-    hp = R_mult(q,gp,n_x)
-    hn = R_mult(q,gn,n_x)
+    call WENO51d(lambda,f,q,delx,n_x,hp,hn)
     dF = ((hp - turn(hp,n_x,1)) + (hn - turn(hn,n_x,1)))/delx
-    !  call WENO51d(lambda,q,delx,n_x,hp,hn)
-    q = qo - dt*dF
+
+    q = 0.75*qo + 0.25*( q - dt*dF)
     q(1,:) = qo(1,:)
     q(n_x,:) = qo(n_x,:)
 
 
     ! RK 3rd step
-    v = Rinv_mult(q,n_x)
     f = build_flux(q,n_x)
-    g = Rinv_mult(f,n_x)
-    call WENO51d(lambda,f,q,delx,n_x,gp,gn)
-    hp = R_mult(q,gp,n_x)
-    hn = R_mult(q,gn,n_x)
+    call WENO51d(lambda,f,q,delx,n_x,hp,hn)
     dF = ((hp - turn(hp,n_x,1)) + (hn - turn(hn,n_x,1)))/delx
-    !  call WENO51d(lambda,q,delx,n_x,hp,hn)
-    q = qo - dt*dF
+
+    q = (qo + 2*( q - dt*dF))/3
     q(1,:) = qo(1,:)
     q(n_x,:) = qo(n_x,:)
 
@@ -98,6 +87,7 @@ program main
       check=save_data(q,x,n_x,t,id)
       id=id+1
     end if
+
     t=t+dt
   end do
 if(VIDEO==1) then

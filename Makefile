@@ -16,7 +16,7 @@ COMPFLAGS          =  -c  $(COMMONFLAGS)
 LINKFLAGS             =       $(COMMONFLAGS)
 
 ### objects
-OBJ = IC1DStep_sub.o plotter.o primitives.o transforms.o fluxes.o WENO51d.o main.o
+OBJ = IC1DStep_sub.o plotter.o primitives.o transforms.o fluxes.o WENO.o WENO51d.o main.o
 OBJS = $(addprefix $(OBJDIR), $(OBJ))
 ### compile and link
 
