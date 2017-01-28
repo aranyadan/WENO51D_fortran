@@ -44,18 +44,17 @@ program main
 
     ! RK 1st step
     f = build_flux(q,n_x)
-    call WENO51d(lambda,f,q,delx,n_x,hp,hn)
-    dF = ((hp - turn(hp,n_x,1)) + (hn - turn(hn,n_x,1)))/delx
+    call WENO51d(lambda,q,delx,n_x,hp,hn)
+    dF = get_deriv(lambda,hp,hn,q,n_x,delx)
 
     q = qo - dt*dF
     q(1,:) = qo(1,:)
     q(n_x,:) = qo(n_x,:)
 
 
-    ! RK 2nd step
     f = build_flux(q,n_x)
-    call WENO51d(lambda,f,q,delx,n_x,hp,hn)
-    dF = ((hp - turn(hp,n_x,1)) + (hn - turn(hn,n_x,1)))/delx
+    call WENO51d(lambda,q,delx,n_x,hp,hn)
+    dF = get_deriv(lambda,hp,hn,q,n_x,delx)
 
     q = 0.75*qo + 0.25*( q - dt*dF)
     q(1,:) = qo(1,:)
@@ -64,8 +63,8 @@ program main
 
     ! RK 3rd step
     f = build_flux(q,n_x)
-    call WENO51d(lambda,f,q,delx,n_x,hp,hn)
-    dF = ((hp - turn(hp,n_x,1)) + (hn - turn(hn,n_x,1)))/delx
+    call WENO51d(lambda,q,delx,n_x,hp,hn)
+    dF = get_deriv(lambda,hp,hn,q,n_x,delx)
 
     q = (qo + 2*( q - dt*dF))/3
     q(1,:) = qo(1,:)

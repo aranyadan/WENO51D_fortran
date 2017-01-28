@@ -1,4 +1,4 @@
-subroutine WENO(lambda,F,q,R_i,Rinv_i,hp_i,hn_i)
+subroutine WENO(lambda,q,R_i,Rinv_i,hp_i,hn_i)
   use flux
   implicit none
   real,dimension(1,3) :: u,v,umm,um,up,upp,vmm,vm,vp,vpp,p0n,p1n,p2n,B0n,B1n
@@ -15,18 +15,13 @@ subroutine WENO(lambda,F,q,R_i,Rinv_i,hp_i,hn_i)
     w_i(i,2) = Rinv_i(2,1) * q(i,1) + Rinv_i(2,2) * q(i,2) + Rinv_i(2,3) * q(i,3)
     w_i(i,3) = Rinv_i(3,1) * q(i,1) + Rinv_i(3,2) * q(i,2) + Rinv_i(3,3) * q(i,3)
 
-    g_i(i,1) = Rinv_i(1,1) * F(i,1) + Rinv_i(1,2) * F(i,2) + Rinv_i(1,3) * F(i,3)
-    g_i(i,2) = Rinv_i(2,1) * F(i,1) + Rinv_i(2,2) * F(i,2) + Rinv_i(2,3) * F(i,3)
-    g_i(i,3) = Rinv_i(3,1) * F(i,1) + Rinv_i(3,2) * F(i,2) + Rinv_i(3,3) * F(i,3)
-
   end do
 
 
-  v_i = 0.5 * (g_i + lambda*w_i)
+  v_i = w_i
 
-  temp = 0.5 * (g_i - lambda*w_i)
 
-  u_i = turn(temp,6,-1)
+  u_i = turn(w_i,6,-1)
 
   ! Right flux
   ! compute u_{i+1/2}^{+}

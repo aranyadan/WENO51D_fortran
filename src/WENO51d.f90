@@ -1,4 +1,4 @@
-subroutine WENO51d(lambda,F,q,dx,n_x,hp,hn)
+subroutine WENO51d(lambda,q,dx,n_x,hp,hn)
   use flux
   use transform
   implicit none
@@ -12,9 +12,7 @@ subroutine WENO51d(lambda,F,q,dx,n_x,hp,hn)
 
   do i=1,n_x
     do j = 6,1,-1
-      Ftemp = turn(F,n_x,3-j)
       qtemp = turn(q,n_x,3-j)
-      F_i(j,:) = Ftemp(i,:)
       q_i(j,:) = qtemp(i,:)
     end do
 
@@ -28,7 +26,7 @@ subroutine WENO51d(lambda,F,q,dx,n_x,hp,hn)
     R_i = Rcalc(u(1),a(1))
     Rinv_i = Rinv(u(1),a(1))
 
-    call WENO(lambda,F_i,q_i,R_i,Rinv_i,hpr,hnr)
+    call WENO(lambda,q_i,R_i,Rinv_i,hpr,hnr)
     hp(i,:) = hpr(1,:)
     hn(i,:) = hnr(1,:)
   end do
