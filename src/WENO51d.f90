@@ -12,8 +12,8 @@ subroutine WENO51d(lambda,F,q,dx,n_x,hp,hn)
 
   do i=1,n_x
     do j = 6,1,-1
-      Ftemp = turn(F,n_x,j-4)
-      qtemp = turn(q,n_x,j-4)
+      Ftemp = turn(F,n_x,3-j)
+      qtemp = turn(q,n_x,3-j)
       F_i(j,:) = Ftemp(i,:)
       q_i(j,:) = qtemp(i,:)
     end do
