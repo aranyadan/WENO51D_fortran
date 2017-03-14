@@ -4,6 +4,7 @@ program main
   use plotter
   use transform
   implicit none
+  ! Plot values: 1=velocity, 2=pressure, 3=density 4=Mach number
   integer,parameter :: n_x = 300, SAVE=1,PLOT=1,PLOTVAL=2,VIDEO=0
   real, parameter :: startx = 0, endx = 1,gamma = 1.4
   real :: delx,dt,cfl,tend,lambda_0,lambda,t,dt_0
