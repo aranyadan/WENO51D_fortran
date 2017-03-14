@@ -59,48 +59,17 @@ contains
     integer :: i,j,k
     Rn = Rcalc(u,a)
 
-    determinant = Rn(1,1)*(Rn(2,2)*Rn(3,3) - Rn(3,2)*Rn(2,3)) - &
-                  Rn(1,2)*(Rn(2,1)*Rn(3,3) - Rn(3,1)*Rn(2,3)) + &
-                  Rn(1,3)*(Rn(2,1)*Rn(3,2) - Rn(3,1)*Rn(2,2))
-    if(abs(determinant)>1e-6) then
-      do i=1,3
-        Rtemp(i,1:3) = Rn(i,1:3)
-        Rtemp(i,4:6) = (/0,0,0/)
-        Rtemp(i,i+3) = 1
-      end do
+    Rinv(1,1) = ((gamma - 1)/4)*u*u/(a*a) + u/(2*a)
+    Rinv(2,1) = 1 - ((gamma - 1)/2) * u*u/(a*a)
+    Rinv(3,1) = ((gamma - 1)/4)*u*u/(a*a) - u/(2*a)
 
-      do i=1,3
-        do j = 1,3
-          if(i/=j) then
-            ratio = Rtemp(j,i) / Rtemp(i,i)
-            do k=1,6
-              Rtemp(j,k) = Rtemp(j,k) - ratio*Rtemp(i,k)
-            end do
-          end if
-        end do
-      end do
-      do i=1,3
-        temp = Rtemp(i,i)
-        do j=1,6
-          Rtemp(i,j) = Rtemp(i,j)/temp
-        end do
-      end do
-      do i=1,3
-        Rinv(i,:) = Rtemp(i,4:6)
-      end do
-    else
-      Rinv(1,1) = ((gamma - 1)/4)*u*u/(a*a) + u/(2*a)
-      Rinv(2,1) = 1 - ((gamma - 1)/2) * u*u/(a*a)
-      Rinv(3,1) = ((gamma - 1)/4)*u*u/(a*a) - u/(2*a)
+    Rinv(1,2) = -1 * ( ((gamma - 1)/2)*u/(a*a) + 1/(2*a))
+    Rinv(2,2) = (gamma - 1)*u/(a*a)
+    Rinv(3,2) = -1 * ( ((gamma - 1)/2)*u/(a*a) - 1/(2*a))
 
-      Rinv(1,2) = -1 * ( ((gamma - 1)/2)*u/(a*a) + 1/(2*a))
-      Rinv(2,2) = (gamma - 1)*u/(a*a)
-      Rinv(3,2) = -1 * ( ((gamma - 1)/2)*u/(a*a) - 1/(2*a))
-
-      Rinv(1,3) = ((gamma - 1)/(2*a*a))
-      Rinv(2,3) = -1*((gamma - 1)/(a*a))
-      Rinv(3,3) = ((gamma - 1)/(2*a*a))
-    end if
+    Rinv(1,3) = ((gamma - 1)/(2*a*a))
+    Rinv(2,3) = -1*((gamma - 1)/(a*a))
+    Rinv(3,3) = ((gamma - 1)/(2*a*a))
 
     ! Rinv(1,1) = 1 !
     ! Rinv(2,1) = 0 !
