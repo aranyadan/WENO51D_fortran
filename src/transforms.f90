@@ -59,17 +59,17 @@ contains
     integer :: i,j,k
     Rn = Rcalc(u,a)
 
-    Rinv(1,1) = ((gamma - 1)/4)*u*u/(a*a) + u/(2*a)
-    Rinv(2,1) = 1 - ((gamma - 1)/2) * u*u/(a*a)
-    Rinv(3,1) = ((gamma - 1)/4)*u*u/(a*a) - u/(2*a)
+  Rinv(1,1) = ((gamma - 1)/4)*u*u/(a*a) + u/(2*a)
+  Rinv(2,1) = 1 - ((gamma - 1)/2) * u*u/(a*a)
+  Rinv(3,1) = ((gamma - 1)/4)*u*u/(a*a) - u/(2*a)
 
-    Rinv(1,2) = -1 * ( ((gamma - 1)/2)*u/(a*a) + 1/(2*a))
-    Rinv(2,2) = (gamma - 1)*u/(a*a)
-    Rinv(3,2) = -1 * ( ((gamma - 1)/2)*u/(a*a) - 1/(2*a))
+  Rinv(1,2) = -1 * ( ((gamma - 1)/2)*u/(a*a) + 1/(2*a))
+  Rinv(2,2) = (gamma - 1)*u/(a*a)
+  Rinv(3,2) = -1 * ( ((gamma - 1)/2)*u/(a*a) - 1/(2*a))
 
-    Rinv(1,3) = ((gamma - 1)/(2*a*a))
-    Rinv(2,3) = -1*((gamma - 1)/(a*a))
-    Rinv(3,3) = ((gamma - 1)/(2*a*a))
+  Rinv(1,3) = ((gamma - 1)/(2*a*a))
+  Rinv(2,3) = -1*((gamma - 1)/(a*a))
+  Rinv(3,3) = ((gamma - 1)/(2*a*a))
 
     ! Rinv(1,1) = 1 !
     ! Rinv(2,1) = 0 !
@@ -111,7 +111,7 @@ contains
     ! Rcalc(1,3) = 0 !
     ! Rcalc(2,3) = 0 !
     ! Rcalc(3,3) = 1 !
-    !
+
 
   end function Rcalc
 

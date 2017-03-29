@@ -5,14 +5,14 @@ subroutine IC1DStep(u,q,n_x,x)
   real,dimension(n_x,3) :: u,q
   real,dimension(n_x) :: x,E
 
-  p_2 = 0.1 !0.1
-  p_1 = 1.0
+  p_2 = 0.571 !0.1
+  p_1 = 3.528
 
-  rho_2 = 0.125 !0.125
-  rho_1 = 1.0
+  rho_2 = 0.5 !0.125
+  rho_1 = 0.445
 
   v_2 = 0.0
-  v_1 = 0.0
+  v_1 = 0.698
 
   mid_x =(n_x+1)/2
   ! Set the primitive variables
