@@ -5,7 +5,7 @@ program main
   use transform
   implicit none
   ! Plot values: 1=velocity, 2=pressure, 3=density 4=Mach number
-  integer,parameter :: n_x = 300, SAVE=1,PLOT=1,PLOTVAL=2,VIDEO=0
+  integer,parameter :: n_x = 200, SAVE=1,PLOT=1,PLOTVAL=3,VIDEO=0
   real, parameter :: startx = 0, endx = 1,gamma = 1.4
   real :: delx,dt,cfl,tend,lambda_0,lambda,t,dt_0
   integer :: I,id=0,check
@@ -13,11 +13,11 @@ program main
   real, dimension(n_x,3) :: u,u_0,q_0,q,qo,dF,hp,hn,v,vp,vn,g,f,gp,gn        ! Stores primitive values and flux values
 
 
-  delx = abs(endx-startx)/n_x
+  delx = abs(endx-startx)/(n_x-1)
   cfl = 0.55
-  tend = 0.1
+  tend = 0.16
 
-  x = (/ (startx + I*delx,I = 1,n_x) /)
+  x = (/ (startx + (I-1)*delx,I = 1,n_x) /)
   call IC1DStep(u_0,q_0,n_x,x)
   q = q_0
   a_0 = SQRT(gamma*u_0(:,2)/u_0(:,3))
@@ -67,7 +67,7 @@ program main
     call WENO51d(lambda,q,delx,n_x,hp,hn)
     dF = get_deriv(lambda,hp,hn,q,n_x,delx)
 
-    q = (qo + 2*( q - dt*dF))/3
+    q = (qo + 2.0*( q - dt*dF))/3.0
     q(1,:) = qo(1,:)
     q(n_x,:) = qo(n_x,:)
 
@@ -79,7 +79,7 @@ program main
     if(t+dt>tend) then
       dt = tend-t
     end if
-
+    t=t+dt
     if(PLOT==1) then
       check=plot_data(q,x,n_x,t,id,PLOTVAL)
       id=id+1
@@ -88,7 +88,6 @@ program main
       id=id+1
     end if
 
-    t=t+dt
   end do
 if(VIDEO==1) then
   check=get_video(PLOTVAL)

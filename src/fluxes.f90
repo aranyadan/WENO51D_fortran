@@ -9,10 +9,8 @@ contains
       do i = 1,n_x
         if (mod(i+times,n_x)>0) then
           F_new(mod(i+times,n_x),:) = F(i,:)
-        else if (mod(i+times,n_x)==0) then
-          F_new(n_x,:) = F(i,:)
         else
-          F_new(mod(i+times,n_x)+n_x,:) = F(i,:)
+          F_new(n_x,:) = F(i,:)
         end if
       end do
       turn = F_new

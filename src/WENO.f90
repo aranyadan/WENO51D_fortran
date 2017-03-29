@@ -21,7 +21,7 @@ subroutine WENO(lambda,q,R_i,Rinv_i,hp_i,hn_i)
   v_i = w_i
 
 
-  u_i = turn(w_i,6,-1)
+  u_i = turn(v_i,6,-1)
 
   ! Right flux
   ! compute u_{i+1/2}^{+}
@@ -32,14 +32,14 @@ subroutine WENO(lambda,q,R_i,Rinv_i,hp_i,hn_i)
   vpp(1,:) = v_i(5,:)
 
   ! Polynomials
-  p0p = (2.0*vmm - 7.0*vm + 11.0*v)/6
-  p1p = (-vm     + 5.0*v  + 2.0*vp)/6
-  p2p = (2.0*v   + 5.0*vp - vpp   )/6
+  p0p = (2.0*vmm - 7.0*vm + 11.0*v)/6.0
+  p1p = (-vm     + 5.0*v  + 2.0*vp)/6.0
+  p2p = (2.0*v   + 5.0*vp - vpp   )/6.0
 
   ! Smoothness indicators
-  B0p = 13/12*(vmm-2 * vm + v  )**2 + 1/4*(vmm - 4*vm + 3*v)**2
-  B1p = 13/12*(vm -2 * v  + vp )**2 + 1/4*(vm  - vp        )**2
-  B2p = 13/12*(v  -2 * vp + vpp)**2 + 1/4*(3*v - 4*vp + vpp)**2
+  B0p = 13.0/12.0*(vmm-2.0 * vm + v  )**2.0 + 1.0/4.0*(vmm - 4.0*vm + 3.0*v)**2.0
+  B1p = 13.0/12.0*(vm -2.0 * v  + vp )**2.0 + 1.0/4.0*(vm  - vp        )**2.0
+  B2p = 13.0/12.0*(v  -2.0 * vp + vpp)**2.0 + 1.0/4.0*(3.0*v - 4.0*vp + vpp)**2.0
 
   !constants
   d0p = 1.0/10
@@ -48,9 +48,9 @@ subroutine WENO(lambda,q,R_i,Rinv_i,hp_i,hn_i)
   epsilon = 1E-6
 
   !alpha weights
-  alpha0p = d0p/(epsilon + B0p)**2
-  alpha1p = d1p/(epsilon + B1p)**2
-  alpha2p = d2p/(epsilon + B2p)**2
+  alpha0p = d0p/(epsilon + B0p)**2.0
+  alpha1p = d1p/(epsilon + B1p)**2.0
+  alpha2p = d2p/(epsilon + B2p)**2.0
   alphasump = alpha0p + alpha1p + alpha2p
 
   ! ENO weights
@@ -71,14 +71,14 @@ subroutine WENO(lambda,q,R_i,Rinv_i,hp_i,hn_i)
   upp(1,:) = u_i(5,:)
 
   ! Polynomials
-  p0n = ( -umm + 5*um + 2*u  )/6
-  p1n = ( 2*um + 5*u  - up   )/6
-  p2n = (11*u  - 7*up + 2*upp)/6
+  p0n = ( -umm + 5.0*um + 2.0*u  )/6.0
+  p1n = ( 2.0*um + 5.0*u  - up   )/6.0
+  p2n = (11.0*u  - 7.0*up + 2.0*upp)/6.0
 
   ! Smoothness indicators
-  B0n = 13/12*(umm-2*um+u  )**2 + 1/4*(umm - 4*um + 3*u)**2
-  B1n = 13/12*(um -2*u +up )**2 + 1/4*(um  - up        )**2
-  B2n = 13/12*(u  -2*up+upp)**2 + 1/4*(3*u - 4*up + upp)**2
+  B0n = 13.0/12.0*(umm-2.0*um+u  )**2.0 + 1.0/4.0*(umm - 4.0*um + 3.0*u)**2.0
+  B1n = 13.0/12.0*(um -2.0*u +up )**2.0 + 1.0/4.0*(um  - up        )**2.0
+  B2n = 13.0/12.0*(u  -2.0*up+upp)**2.0 + 1.0/4.0*(3.0*u - 4.0*up + upp)**2.0
 
   !constants
   d0n = 3.0/10
@@ -86,9 +86,9 @@ subroutine WENO(lambda,q,R_i,Rinv_i,hp_i,hn_i)
   d2n = 1.0/10
 
   ! Alpha Weights
-  alpha0n = d0n/(epsilon + B0n)**2
-  alpha1n = d1n/(epsilon + B1n)**2
-  alpha2n = d2n/(epsilon + B2n)**2
+  alpha0n = d0n/(epsilon + B0n)**2.0
+  alpha1n = d1n/(epsilon + B1n)**2.0
+  alpha2n = d2n/(epsilon + B2n)**2.0
   alphasumn = alpha0n + alpha1n + alpha2n
 
   ! ENO weights
