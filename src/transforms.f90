@@ -67,13 +67,5 @@ contains
   end function Rcalc
 
 
-  function u_half(q,n_x)
-    integer :: n_x,i
-    real,dimension(n_x,3) :: q,u_half
-    ! Calculate u at half steps
-    do i=1,n_x-1
-      u_half(i,:) = (q(i,:) + q(i+1,:))/2.0
-    end do
-    u_half(n_x,:) = (q(1,:) + q(n_x,:))/2.0
-  end function u_half
+
 end module transform
