@@ -14,7 +14,7 @@ program main
 
   delx = abs(endx-startx)/(n_x-1)
   cfl = 0.55
-  tend = 0.16
+  tend = 0.1
 
   x = (/ (startx + (I-1)*delx,I = 1,n_x) /)
   call IC1DStep(u_0,q_0,n_x,x)
@@ -79,7 +79,7 @@ program main
     if(t+dt>tend) then
       dt = tend-t
     end if
-    t=t+dt
+
     if(PLOT==1) then
       check=plot_data(q,x,n_x,t,id,PLOTVAL)
       id=id+1
@@ -87,6 +87,7 @@ program main
       check=save_data(q,x,n_x,t,id)
       id=id+1
     end if
+      t=t+dt
 
   end do
 if(VIDEO==1) then
